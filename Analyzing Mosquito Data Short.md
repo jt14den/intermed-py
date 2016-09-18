@@ -1,4 +1,6 @@
 
+start notebook inside 'mosquitos' folder
+
 
 ```python
 import pandas
@@ -12,7 +14,8 @@ import pandas
 year,temperature,rainfall,mosquitos  
 2001,80,157,150  
 2002,85,252,2177  
-2003,86,154,153  
+2003,86,154,153
+## show file
 
 ### Learning objectives
 * conduct variable assignment, looping, and conditionals in python
@@ -20,27 +23,6 @@ year,temperature,rainfall,mosquitos
 * read tabular data from a file
 * subset and perform analysis on data
 * display simple graphs
-
-to get data needed for this unit:
-
-### if you used get clone yesterday to get sd-workshop:
-  
-1. navigate to sd-workshop/ 
-   * cd Desktop/sd-workhop
-2. run: git pull at the command line
-
-### if you downloaded the zip file:
-
-1. navigate to the Desktop
-2. run: git clone https://github.com/ucsdlib/sd-workshop.git
-
-
-```python
-cd /Users/jtdennis/Desktop/sd-workshop/mosquitos
-```
-
-    /Users/jtdennis/Desktop/sd-workshop
-
 
 
 ```python
@@ -333,115 +315,6 @@ print(data[0:2])
 
 
 ```python
-data[1]
-```
-
-
-    ---------------------------------------------------------------------------
-
-    KeyError                                  Traceback (most recent call last)
-
-    <ipython-input-17-c805864c0d75> in <module>()
-    ----> 1 data[1]
-    
-
-    /Users/jtdennis/anaconda/envs/py35/lib/python3.5/site-packages/pandas/core/frame.py in __getitem__(self, key)
-       1967             return self._getitem_multilevel(key)
-       1968         else:
-    -> 1969             return self._getitem_column(key)
-       1970 
-       1971     def _getitem_column(self, key):
-
-
-    /Users/jtdennis/anaconda/envs/py35/lib/python3.5/site-packages/pandas/core/frame.py in _getitem_column(self, key)
-       1974         # get column
-       1975         if self.columns.is_unique:
-    -> 1976             return self._get_item_cache(key)
-       1977 
-       1978         # duplicate columns & possible reduce dimensionality
-
-
-    /Users/jtdennis/anaconda/envs/py35/lib/python3.5/site-packages/pandas/core/generic.py in _get_item_cache(self, item)
-       1089         res = cache.get(item)
-       1090         if res is None:
-    -> 1091             values = self._data.get(item)
-       1092             res = self._box_item_values(item, values)
-       1093             cache[item] = res
-
-
-    /Users/jtdennis/anaconda/envs/py35/lib/python3.5/site-packages/pandas/core/internals.py in get(self, item, fastpath)
-       3209 
-       3210             if not isnull(item):
-    -> 3211                 loc = self.items.get_loc(item)
-       3212             else:
-       3213                 indexer = np.arange(len(self.items))[isnull(self.items)]
-
-
-    /Users/jtdennis/anaconda/envs/py35/lib/python3.5/site-packages/pandas/core/index.py in get_loc(self, key, method, tolerance)
-       1757                                  'backfill or nearest lookups')
-       1758             key = _values_from_object(key)
-    -> 1759             return self._engine.get_loc(key)
-       1760 
-       1761         indexer = self.get_indexer([key], method=method,
-
-
-    pandas/index.pyx in pandas.index.IndexEngine.get_loc (pandas/index.c:3979)()
-
-
-    pandas/index.pyx in pandas.index.IndexEngine.get_loc (pandas/index.c:3843)()
-
-
-    pandas/hashtable.pyx in pandas.hashtable.PyObjectHashTable.get_item (pandas/hashtable.c:12265)()
-
-
-    pandas/hashtable.pyx in pandas.hashtable.PyObjectHashTable.get_item (pandas/hashtable.c:12216)()
-
-
-    KeyError: 1
-
-
-* this is b/c data[1] is unambiguous
-* if we want a single row we can either take a slice that returns a single row
-
-
-```python
-print(data[1:2])
-```
-
-       year  temperature  rainfall  mosquitos
-    1  2002           85       252        217
-
-
-* or use the `.iloc` method, which stands for "integer location" since we are looking up the row based on its integer:
-
-
-```python
-print(data.iloc[1])
-```
-
-    year           2002
-    temperature      85
-    rainfall        252
-    mosquitos       217
-    Name: 1, dtype: int64
-
-
-* we can also use this syntax to get larger subsets
-
-
-```python
-print(data.iloc[1:3])
-```
-
-       year  temperature  rainfall  mosquitos
-    1  2002           85       252        217
-    2  2003           86       154        153
-
-
-* we can also subset the data based on the value of other rows:
-
-
-```python
 print(data['temperature'][data['year'] > 2005])
 ```
 
@@ -521,7 +394,7 @@ for item in list:
    do_something
 ```
 
-* let's look over temperatures and print out their values in degrees Celsius
+* let's loop over temperatures and print out their values in degrees Celsius
 
 
 ```python
@@ -543,222 +416,7 @@ for temp_in_f in temps:
     23.3333333333
 
 
-## Conditionals 
-
-* let's review conditionals from last week (if/then/else)
-
-```python
-if condition: 
-   do_something
-```
-
-* So if we want to loop over the temperatures and print out only those temperatures that are > 80
-
-
-```python
-data['temperature'][0]
-```
-
-
-
-
-    80
-
-
-
-
-```python
-temp = data['temperature'][0]
-if temp > 75:
-    print("The temperature is greater than 75")
-```
-
-    The temperature is greater than 75
-
-
-* We can also use `==` for equality
-* `<=` for less than or equal to
-* `>=` for greater than or equal to
-* `!=` for not equal to
-
-* we can add conditions with elif and else
-
-
-```python
-temp = data['temperature'][0]
-if temp <= 80:
-    print("the temp is < 80")
-elif temp > 80:
-    print("the temp is > 80")
-else:
-    print("the temp is equal to 80")
-```
-
-    the temp is < 80
-
-
-### Challenge:
->**Import the data from A2_mosquito_data.csv, determine the mean temperate, and loop over the temperature values. For each value print out whether it is greater than the mean, less than the mean, or equal to the mean.**
-
-
-```python
-for temp in data2["temperature"]:
-    if temp > data2.temperature.mean():
-        print(temp, "is greater than", data2.temperature.mean())
-    else:
-        print(temp, "is less than", data2.temperature.mean())
-```
-
-    82 is greater than 80.3921568627
-    70 is less than 80.3921568627
-    89 is greater than 80.3921568627
-    74 is less than 80.3921568627
-    78 is less than 80.3921568627
-    85 is greater than 80.3921568627
-    86 is greater than 80.3921568627
-    75 is less than 80.3921568627
-    70 is less than 80.3921568627
-    86 is greater than 80.3921568627
-    83 is greater than 80.3921568627
-    78 is less than 80.3921568627
-    87 is greater than 80.3921568627
-    76 is less than 80.3921568627
-    86 is greater than 80.3921568627
-    90 is greater than 80.3921568627
-    76 is less than 80.3921568627
-    87 is greater than 80.3921568627
-    88 is greater than 80.3921568627
-    87 is greater than 80.3921568627
-    81 is greater than 80.3921568627
-    74 is less than 80.3921568627
-    85 is greater than 80.3921568627
-    71 is less than 80.3921568627
-    80 is less than 80.3921568627
-    72 is less than 80.3921568627
-    76 is less than 80.3921568627
-    85 is greater than 80.3921568627
-    83 is greater than 80.3921568627
-    86 is greater than 80.3921568627
-    82 is greater than 80.3921568627
-    77 is less than 80.3921568627
-    74 is less than 80.3921568627
-    70 is less than 80.3921568627
-    77 is less than 80.3921568627
-    89 is greater than 80.3921568627
-    83 is greater than 80.3921568627
-    80 is less than 80.3921568627
-    86 is greater than 80.3921568627
-    72 is less than 80.3921568627
-    79 is less than 80.3921568627
-    85 is greater than 80.3921568627
-    86 is greater than 80.3921568627
-    72 is less than 80.3921568627
-    78 is less than 80.3921568627
-    71 is less than 80.3921568627
-    88 is greater than 80.3921568627
-    79 is less than 80.3921568627
-    73 is less than 80.3921568627
-    86 is greater than 80.3921568627
-    87 is greater than 80.3921568627
-
-
-### Plotting
-
-
-```python
-%matplotlib inline
-```
-
-
-```python
-from matplotlib import pyplot as plt
-```
-
-* couple new things in the import statement above
-    1. we can import part of a library using `from library import submodule` syntax
-    2. we can use a different name to refer to the by using `as new name` - this called aliasing
-* let's make a simple plot showing how the number of mosquitos varies over time
-
-
-```python
-data = pandas.read_csv('A2_mosquito_data.csv')
-plt.plot(data['year'], data['mosquitos'])
-```
-
-
-
-
-    [<matplotlib.lines.Line2D at 0x10ad7a080>]
-
-
-
-
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_50_1.png)
-
-
-* more complicated plots can be created by adding more info
-* let's look at how the diff. weather variables vary over time
-
-
-```python
-plt.figure(figsize=(10.0,3.0))
-
-plt.subplot(1,2,1)
-plt.plot(data['year'], data['temperature'], 'ro-')
-plt.xlabel('Year')
-plt.ylabel('Temperature')
-
-plt.subplot(1,2,2)
-plt.plot(data['year'], data['rainfall'], 'bs-')
-plt.xlabel('year')
-plt.ylabel('rain fall')
-```
-
-
-
-
-    <matplotlib.text.Text at 0x10d294080>
-
-
-
-
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_52_1.png)
-
-
-### Challenge
-
->**Using the data in A2_mosquito_data.csv plot the relationship between the number of mosquitos and temperature and the number of mosquitos and rainfall.**
-
-
-```python
-plt.figure(figsize=(10.0,3.0))
-
-plt.subplot(1,2,1)
-plt.plot(data2['year'], data['temperature'], 'ro-')
-plt.xlabel('Year')
-plt.ylabel('Temperature')
-
-plt.subplot(1,2,2)
-plt.plot(data['year'], data['rainfall'], 'bs-')
-plt.xlabel('year')
-plt.ylabel('rain fall')
-```
-
-
-
-
-    <matplotlib.text.Text at 0x10d294080>
-
-
-
-
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_54_1.png)
-
-
 ## Modularization and Doc
-
-* relationship b/t the weather and the number of mosquitos so that we can control mosiquitos
-* relationships across sites
 
 ** learning objectives**
 
@@ -766,75 +424,6 @@ plt.ylabel('rain fall')
 * break programs into chunks 
 * write functions
 * document code
-
-
-```python
-import pandas as pd
-```
-
-
-```python
-data = pd.read_csv('A2_mosquito_data.csv')
-```
-
-
-```python
-print(data)
-```
-
-        year  temperature  rainfall  mosquitos
-    0   1960           82       200        180
-    1   1961           70       227        194
-    2   1962           89       231        207
-    3   1963           74       114        121
-    4   1964           78       147        140
-    5   1965           85       151        148
-    6   1966           86       172        162
-    7   1967           75       106        112
-    8   1968           70       276        230
-    9   1969           86       165        162
-    10  1970           83       222        198
-    11  1971           78       297        247
-    12  1972           87       288        248
-    13  1973           76       286        239
-    14  1974           86       231        202
-    15  1975           90       284        243
-    16  1976           76       190        175
-    17  1977           87       257        225
-    18  1978           88       128        133
-    19  1979           87       218        199
-    20  1980           81       206        184
-    21  1981           74       175        160
-    22  1982           85       202        187
-    23  1983           71       130        126
-    24  1984           80       225        200
-    25  1985           72       196        173
-    26  1986           76       261        222
-    27  1987           85       111        121
-    28  1988           83       247        210
-    29  1989           86       137        142
-    30  1990           82       159        152
-    31  1991           77       172        160
-    32  1992           74       280        231
-    33  1993           70       291        238
-    34  1994           77       126        125
-    35  1995           89       191        178
-    36  1996           83       298        248
-    37  1997           80       282        237
-    38  1998           86       219        195
-    39  1999           72       143        134
-    40  2000           79       262        221
-    41  2001           85       189        175
-    42  2002           86       205        186
-    43  2003           72       195        173
-    44  2004           78       148        146
-    45  2005           71       262        219
-    46  2006           88       255        226
-    47  2007           79       262        221
-    48  2008           73       198        176
-    49  2009           86       215        187
-    50  2010           87       127        129
-
 
 * write code for people not computers
 * use meaniful variable names
@@ -855,312 +444,6 @@ print(data.head())
     4  1964           78       147        140
 
 
-* let's go ahead and conduct a regression on the data
-* we will use `statsmodels` library to conduct the regression
-
-
-```python
-!conda install -y statsmodels
-```
-
-    Using Anaconda Cloud api site https://api.anaconda.org
-    Fetching package metadata: ....
-    Solving package specifications: .........
-    
-    Package plan for installation in environment /Users/jtdennis/anaconda/envs/py35:
-    
-    The following packages will be downloaded:
-    
-        package                    |            build
-        ---------------------------|-----------------
-        patsy-0.4.1                |           py35_0         370 KB
-        statsmodels-0.6.1          |      np110py35_0         4.8 MB
-        ------------------------------------------------------------
-                                               Total:         5.1 MB
-    
-    The following NEW packages will be INSTALLED:
-    
-        patsy:       0.4.1-py35_0     
-        statsmodels: 0.6.1-np110py35_0
-    
-    Fetching packages ...
-    patsy-0.4.1-py 100% |################################| Time: 0:00:00   1.11 MB/s
-    statsmodels-0. 100% |################################| Time: 0:00:01   4.26 MB/s
-    Extracting packages ...
-    [      COMPLETE      ]|###################################################| 100%
-    Linking packages ...
-    [      COMPLETE      ]|###################################################| 100%
-
-
-
-```python
-import statsmodels.api as sm
-
-reg_results = sm.OLS.from_formula('mosquitos ~ temperature + rainfall', data).fit()
-reg_results.summary()
-```
-
-
-
-
-<table class="simpletable">
-<caption>OLS Regression Results</caption>
-<tr>
-  <th>Dep. Variable:</th>        <td>mosquitos</td>    <th>  R-squared:         </th> <td>   0.997</td>
-</tr>
-<tr>
-  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.997</td>
-</tr>
-<tr>
-  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   7889.</td>
-</tr>
-<tr>
-  <th>Date:</th>             <td>Tue, 26 Apr 2016</td> <th>  Prob (F-statistic):</th> <td>3.68e-61</td>
-</tr>
-<tr>
-  <th>Time:</th>                 <td>13:53:00</td>     <th>  Log-Likelihood:    </th> <td> -111.54</td>
-</tr>
-<tr>
-  <th>No. Observations:</th>      <td>    51</td>      <th>  AIC:               </th> <td>   229.1</td>
-</tr>
-<tr>
-  <th>Df Residuals:</th>          <td>    48</td>      <th>  BIC:               </th> <td>   234.9</td>
-</tr>
-<tr>
-  <th>Df Model:</th>              <td>     2</td>      <th>                     </th>     <td> </td>   
-</tr>
-<tr>
-  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>   
-</tr>
-</table>
-<table class="simpletable">
-<tr>
-       <td></td>          <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th> <th>[95.0% Conf. Int.]</th> 
-</tr>
-<tr>
-  <th>Intercept</th>   <td>    2.0445</td> <td>    4.305</td> <td>    0.475</td> <td> 0.637</td> <td>   -6.610    10.699</td>
-</tr>
-<tr>
-  <th>temperature</th> <td>    0.4844</td> <td>    0.051</td> <td>    9.457</td> <td> 0.000</td> <td>    0.381     0.587</td>
-</tr>
-<tr>
-  <th>rainfall</th>    <td>    0.6967</td> <td>    0.006</td> <td>  125.385</td> <td> 0.000</td> <td>    0.686     0.708</td>
-</tr>
-</table>
-<table class="simpletable">
-<tr>
-  <th>Omnibus:</th>       <td> 1.651</td> <th>  Durbin-Watson:     </th> <td>   1.872</td>
-</tr>
-<tr>
-  <th>Prob(Omnibus):</th> <td> 0.438</td> <th>  Jarque-Bera (JB):  </th> <td>   0.906</td>
-</tr>
-<tr>
-  <th>Skew:</th>          <td>-0.278</td> <th>  Prob(JB):          </th> <td>   0.636</td>
-</tr>
-<tr>
-  <th>Kurtosis:</th>      <td> 3.343</td> <th>  Cond. No.          </th> <td>3.16e+03</td>
-</tr>
-</table>
-
-
-
-* `statsmodels` lets us use the names of the columns in our dataframe to clearly specify the form of the model we want
-* the code is readable 
-* `summary` method gives usa visual representative as a result
-* we can look up particular values related to teh regression using `regr_results` 
-
-
-```python
-print(reg_results.params)
-```
-
-    Intercept      2.044527
-    temperature    0.484413
-    rainfall       0.696717
-    dtype: float64
-
-
-
-```python
-print(reg_results.rsquared)
-```
-
-    0.996966873691
-
-
-* we can also assign them to variables
-
-
-```python
-parameters = reg_results.params
-rsquared = reg_results.rsquared
-```
-
-* we can plot the observed data agains the values precicted by our regression 
-* first let's turn on inline plotting
-
-
-```python
-%matplotlib inline
-```
-
-
-```python
-import matplotlib.pyplot as plt
-
-predicted = parameters[0] + parameters[1] * data['temperature'] + parameters[2] * data['rainfall']
-plt.plot(predicted, data['mosquitos'], 'ro')
-min_mosquitos, max_mosquitos = min(data['mosquitos']), max(data['mosquitos'])
-plt.plot([min_mosquitos, max_mosquitos], [min_mosquitos, max_mosquitos], 'k-')
-```
-
-
-
-
-    [<matplotlib.lines.Line2D at 0x11046e908>]
-
-
-
-
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_71_1.png)
-
-
-
-```python
-import pandas as pd
-import statsmodels.api as sm
-import matplotlib.pyplot as plt
-
-data = pd.read_csv('A2_mosquito_data.csv')
-data['temperature'] = (data['temperature'] - 32) * 5 / 9.0
-regr_results = sm.OLS.from_formula('mosquitos ~ temperature + rainfall', data).fit()
-parameters = regr_results.params
-rsquared = regr_results.rsquared
-predicted = parameters[0] + parameters[1] * data['temperature'] + parameters[2] * data['rainfall']
-plt.plot(predicted, data['mosquitos'], 'ro')
-min_mosquitos, max_mosquitos = min(data['mosquitos']), max(data['mosquitos'])
-plt.plot([min_mosquitos, max_mosquitos], [min_mosquitos, max_mosquitos], 'k-')
-print(parameters)
-print("R^2 = ", rsquared)
-```
-
-    Intercept      17.545739
-    temperature     0.871943
-    rainfall        0.696717
-    dtype: float64
-    R^2 =  0.996966873691
-
-
-* now we need to loop all the data files, but we'd need to grow our code more
-* need to break our code into manageble sized chunks 
-* creating functions
-
-### Functions
-
-* review: 
-
-```python
-def function_name(inputs):
-    do stuff
-    return output
-```
-
-* general form
-
-**EXAMPLE: function that returns the value of a number squared**
-
-
-```python
-def square(x):
-    x_squared = x ** 2
-    return x_squared
-
-print('Four sqared is', square(4))
-print('Five squared is', square(5))
-```
-
-    Four sqared is 16
-    Five squared is 25
-
-
-
-```python
-#we can also return the desired value directly
-def square(x):
-    return x ** 2
-
-print(square(3))
-```
-
-    9
-
-
-* remember if we want to use the results of a function later we need to store it
-
-
-```python
-two_squared = square(2)
-print(two_squared)
-```
-
-    4
-
-
-## Challenge - function 
-
-1. Write a function that converts temperature from Fahrenheit to Celcius and use it to replace
-
->```python
-data['temperature'] = (data['temperature'] - 32) * 5 / 9.0
-```
-
-in our program.
-
-2. Write a function called analyze() that takes data as an input, performs the regression, makes the observed-predicted plot, and returns parameters.
-
-
-```python
-def fahr_to_celsius(temp_fahr):
-    temp_celsius = (temp_fahr- 32) * 5/9
-    return temp_celsius
-
-print(fahr_to_celsius(32))
-```
-
-    0.0
-
-
-*Walk through someone’s result. When discussing talk about different names. E.g., fahr_to_celcius is better than temp_to_celcius since it is explicit both the input and the output. Talk about the fact that even though this doesn’t save us any lines of code it’s still easier to read.*
-
-## More pandas 
-
-* Let's exlore using pandas some more
-* We can get attributes of the data frame, like it's columns
-
-
-```python
-data = pandas.read_csv("A1_mosquito_data.csv", sep=",")
-```
-
-
-```python
-data.columns
-```
-
-
-
-
-    Index(['year', 'temperature', 'rainfall', 'mosquitos'], dtype='object')
-
-
-
-
-```python
-%matplotlib inline
-```
-
-* we can plot a single variable using the dot notation to plot from a dataframe objtect
-
 
 ```python
 data['temperature'].plot(color="black", marker="*")
@@ -1174,7 +457,7 @@ data['temperature'].plot(color="black", marker="*")
 
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_88_1.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_32_1.png)
 
 
 * we can also set the index of the data frame
@@ -1512,11 +795,26 @@ data['temperature'].plot()
 
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_97_1.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_41_1.png)
 
 
 * ah what happened to the x axes labels?  
 * our index is not the right data type
+
+
+```python
+data.dtypes
+```
+
+
+
+
+    temperature    int64
+    rainfall       int64
+    mosquitos      int64
+    dtype: object
+
+
 
 
 ```python
@@ -1550,25 +848,10 @@ data['temperature'].plot()
 
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_102_1.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_47_1.png)
 
 
 * one attribute of data frames is `dtypes` - tells us what our data types are
-
-
-```python
-data.dtypes
-```
-
-
-
-
-    temperature    int64
-    rainfall       int64
-    mosquitos      int64
-    dtype: object
-
-
 
 * Subsetting and filtering data frames
 * let's see only temp greater than 80
@@ -1649,8 +932,6 @@ type(data)
     pandas.core.frame.DataFrame
 
 
-
-* let's grab mosiquitos where rainfall is less than 200
 
 ### Challenge
 
@@ -1766,12 +1047,49 @@ data.plot()
 
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_122_1.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_65_1.png)
 
 
 ## Functions
 
-Documenting our functions. Using function with pandas objects.
+```python
+def function_name(inputs):
+    do stuff
+    return output
+```
+
+* general form
+
+## Challenge - function 
+
+1. Write a function that converts temperature from Fahrenheit to Celcius and use it to replace
+
+>```python
+data['temperature'] = (data['temperature'] - 32) * 5 / 9.0
+```
+
+in our program.
+
+```python
+def fahr_to_celsius(temp_fahr):
+    #your code here
+    return temp_celsius
+```
+
+
+```python
+def fahr_to_celsius(temp_fahr):
+    temp_celsius = (temp_fahr- 32) * 5/9
+    return temp_celsius
+
+print(fahr_to_celsius(32))
+```
+
+    0.0
+
+
+* Documenting our functions. 
+* Using function with pandas objects.
 
 
 ```python
@@ -2074,7 +1392,7 @@ plt.savefig('A1_mosquito_data_mosquitos_vs_tempC.png')
 ```
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_146_0.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_92_0.png)
 
 
 
@@ -2123,7 +1441,7 @@ a
 
 
 
-* remember how we sliced off parts of strings last week
+* remember how we sliced off parts of strings earlier
 * we can reuse that here
 
 
@@ -2226,7 +1544,7 @@ name_of_png = create_mosquitos_vs_tempC_plot('A2_mosquito_data.csv')
 
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_166_1.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_112_1.png)
 
 
 * yay, we sucessfully created a function that takes a filename, reads in data, does a conversion, plots and then saves plot to the file
@@ -2257,7 +1575,7 @@ create_mosquitos_vs_tempC_plot("B1_mosquito_data.csv")
 
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_169_2.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_115_2.png)
 
 
 
@@ -2302,7 +1620,7 @@ mosquito_data_A2 = create_mosquitos_vs_tempC_plot("A2_mosquito_data.csv")
 
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_173_1.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_119_1.png)
 
 
 * we can then save that new data out as csv
@@ -2431,7 +1749,7 @@ data = analyze.create_mosquitos_vs_tempC_plot("A2_mosquito_data.csv")
 
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_182_1.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_128_1.png)
 
 
 
@@ -2457,7 +1775,7 @@ data = analyze.create_mosquitos_vs_tempC_plot("A2_mosquito_data.csv")
 
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_185_1.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_131_1.png)
 
 
 
@@ -2497,7 +1815,7 @@ data = analyze.create_mosquitos_vs_tempC_plot("A2_mosquito_data.csv")
 
 
 
-![png](Analyzing%20Mosquito%20Data_files/Analyzing%20Mosquito%20Data_189_1.png)
+![png](Analyzing%20Mosquito%20Data%20Short_files/Analyzing%20Mosquito%20Data%20Short_135_1.png)
 
 
 
